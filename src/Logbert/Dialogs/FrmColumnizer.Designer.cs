@@ -35,10 +35,6 @@
       this.txtName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
       this.dgvColumns = new Com.Couchcoding.GuiLibrary.Controls.DataGridViewEx();
-      this.clmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.clmRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.clmOptional = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-      this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
       this.pnlGrid = new Com.Couchcoding.GuiLibrary.Controls.InfoPanel();
       this.tsColumns = new Com.Couchcoding.GuiLibrary.Controls.ToolStripEx();
       this.tsbAddColumn = new System.Windows.Forms.ToolStripButton();
@@ -53,6 +49,11 @@
       this.tsbEditLogLevels = new System.Windows.Forms.ToolStripButton();
       this.tsbEditDateTimeFormat = new System.Windows.Forms.ToolStripButton();
       this.nfoPanel = new Com.Couchcoding.GuiLibrary.Controls.InfoPanel();
+      this.clmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.clmRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.clmOptional = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+      this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+      this.clmGroupScope = new System.Windows.Forms.DataGridViewTextBoxColumn();
       ((System.ComponentModel.ISupportInitialize)(this.dgvColumns)).BeginInit();
       this.pnlGrid.SuspendLayout();
       this.tsColumns.SuspendLayout();
@@ -94,8 +95,8 @@
       // 
       // txtName
       // 
-      this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+      | System.Windows.Forms.AnchorStyles.Right)));
       this.txtName.Location = new System.Drawing.Point(8, 86);
       this.txtName.Name = "txtName";
       this.txtName.Size = new System.Drawing.Size(608, 23);
@@ -123,7 +124,8 @@
             this.clmName,
             this.clmRegex,
             this.clmOptional,
-            this.clmType});
+            this.clmType,
+            this.clmGroupScope});
       this.dgvColumns.Dock = System.Windows.Forms.DockStyle.Fill;
       this.dgvColumns.Location = new System.Drawing.Point(1, 1);
       this.dgvColumns.MultiSelect = false;
@@ -137,52 +139,11 @@
       this.dgvColumns.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.DgvColumnsEditingControlShowing);
       this.dgvColumns.SelectionChanged += new System.EventHandler(this.DgvColumnsSelectionChanged);
       // 
-      // clmName
-      // 
-      this.clmName.FillWeight = 30F;
-      this.clmName.HeaderText = "Name";
-      this.clmName.MinimumWidth = 100;
-      this.clmName.Name = "clmName";
-      this.clmName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-      // 
-      // clmRegex
-      // 
-      this.clmRegex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.clmRegex.DefaultCellStyle = dataGridViewCellStyle1;
-      this.clmRegex.FillWeight = 70F;
-      this.clmRegex.HeaderText = "Regular expression";
-      this.clmRegex.MinimumWidth = 100;
-      this.clmRegex.Name = "clmRegex";
-      this.clmRegex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-      // 
-      // clmOptional
-      // 
-      this.clmOptional.HeaderText = "Optional";
-      this.clmOptional.MinimumWidth = 70;
-      this.clmOptional.Name = "clmOptional";
-      this.clmOptional.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-      this.clmOptional.Width = 70;
-      // 
-      // clmType
-      // 
-      this.clmType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.clmType.HeaderText = "Type";
-      this.clmType.Items.AddRange(new object[] {
-            "Unknown",
-            "Timestamp",
-            "Level",
-            "Message"});
-      this.clmType.MaxDropDownItems = 4;
-      this.clmType.MinimumWidth = 100;
-      this.clmType.Name = "clmType";
-      this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-      // 
       // pnlGrid
       // 
-      this.pnlGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.pnlGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+              | System.Windows.Forms.AnchorStyles.Left)
+              | System.Windows.Forms.AnchorStyles.Right)));
       this.pnlGrid.BackColor = System.Drawing.SystemColors.Control;
       this.pnlGrid.BorderColor = System.Drawing.SystemColors.ControlDark;
       this.pnlGrid.Controls.Add(this.dgvColumns);
@@ -201,17 +162,17 @@
       this.tsColumns.Dock = System.Windows.Forms.DockStyle.None;
       this.tsColumns.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
       this.tsColumns.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbAddColumn,
-            this.tsbRemoveColumn,
-            this.tsbEditColumn,
-            this.toolStripSeparator1,
-            this.tsbMoveUp,
-            this.tsbMoveDown,
-            this.toolStripSeparator2,
-            this.tsbTestColumnizer,
-            this.toolStripSeparator3,
-            this.tsbEditLogLevels,
-            this.tsbEditDateTimeFormat});
+      this.tsbAddColumn,
+      this.tsbRemoveColumn,
+      this.tsbEditColumn,
+      this.toolStripSeparator1,
+      this.tsbMoveUp,
+      this.tsbMoveDown,
+      this.toolStripSeparator2,
+      this.tsbTestColumnizer,
+      this.toolStripSeparator3,
+      this.tsbEditLogLevels,
+      this.tsbEditDateTimeFormat});
       this.tsColumns.Location = new System.Drawing.Point(410, 133);
       this.tsColumns.Name = "tsColumns";
       this.tsColumns.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -322,8 +283,8 @@
       // 
       // nfoPanel
       // 
-      this.nfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.nfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+      | System.Windows.Forms.AnchorStyles.Right)));
       this.nfoPanel.BackColor = System.Drawing.Color.WhiteSmoke;
       this.nfoPanel.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
       this.nfoPanel.InfoIcon = global::Com.Couchcoding.Logbert.Properties.Resources.StatusAnnotations_Information_16xLG;
@@ -334,9 +295,57 @@
       this.nfoPanel.Size = new System.Drawing.Size(608, 48);
       this.nfoPanel.TabIndex = 5;
       this.nfoPanel.Text = "Note: The columns for bookmarks and log numbers will always be added and each reg" +
-    "ular expression needs a grouped item.";
+  "ular expression needs a grouped item.";
       this.nfoPanel.TextPadding = new System.Windows.Forms.Padding(0, 6, 0, 0);
       this.nfoPanel.Title = "";
+      // 
+      // clmName
+      // 
+      this.clmName.FillWeight = 30F;
+      this.clmName.HeaderText = "Name";
+      this.clmName.MinimumWidth = 100;
+      this.clmName.Name = "clmName";
+      this.clmName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+      // 
+      // clmRegex
+      // 
+      this.clmRegex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.clmRegex.DefaultCellStyle = dataGridViewCellStyle1;
+      this.clmRegex.FillWeight = 70F;
+      this.clmRegex.HeaderText = "Regular expression";
+      this.clmRegex.MinimumWidth = 100;
+      this.clmRegex.Name = "clmRegex";
+      this.clmRegex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+      // 
+      // clmOptional
+      // 
+      this.clmOptional.HeaderText = "Optional";
+      this.clmOptional.MinimumWidth = 70;
+      this.clmOptional.Name = "clmOptional";
+      this.clmOptional.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+      this.clmOptional.Width = 70;
+      // 
+      // clmType
+      // 
+      this.clmType.FlatStyle = System.Windows.Forms.FlatStyle.System;
+      this.clmType.HeaderText = "Type";
+      this.clmType.Items.AddRange(new object[] {
+      "Unknown",
+      "Timestamp",
+      "Level",
+      "Message",
+      "Multigroup"});
+      this.clmType.MaxDropDownItems = 4;
+      this.clmType.MinimumWidth = 100;
+      this.clmType.Name = "clmType";
+      this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+      // 
+      // clmGroupScope
+      // 
+      this.clmGroupScope.HeaderText = "Grp/Scope";
+      this.clmGroupScope.Name = "clmGroupScope";
+      this.clmGroupScope.Width = 70;
       // 
       // FrmColumnizer
       // 
@@ -386,12 +395,13 @@
     private System.Windows.Forms.ToolStripButton tsbMoveDown;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     private GuiLibrary.Controls.InfoPanel nfoPanel;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+    private System.Windows.Forms.ToolStripButton tsbEditLogLevels;
+    private System.Windows.Forms.ToolStripButton tsbEditDateTimeFormat;
     private System.Windows.Forms.DataGridViewTextBoxColumn clmName;
     private System.Windows.Forms.DataGridViewTextBoxColumn clmRegex;
     private System.Windows.Forms.DataGridViewCheckBoxColumn clmOptional;
     private System.Windows.Forms.DataGridViewComboBoxColumn clmType;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-    private System.Windows.Forms.ToolStripButton tsbEditLogLevels;
-        private System.Windows.Forms.ToolStripButton tsbEditDateTimeFormat;
-    }
+    private System.Windows.Forms.DataGridViewTextBoxColumn clmGroupScope;
+  }
 }

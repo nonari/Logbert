@@ -51,8 +51,15 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
     Level,
 
     /// <summary>
-    /// Column type fot the log message.
+    /// Column type for the log message.
     /// </summary>
-    Message
-  }
+    Message,
+
+    /// <summary>
+    /// Column type for processing several columns data
+    /// with a single multigroup regex
+    /// </summary>
+    Multigroup
+
+    }
 }

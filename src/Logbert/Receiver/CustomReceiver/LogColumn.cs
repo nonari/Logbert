@@ -59,6 +59,16 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
     }
 
     /// <summary>
+    /// Gets or sets the scope if column is multigroup or references a group of a multigroup
+    /// column at his scope or references its own regex group of choose.
+    /// </summary>
+    public string GroupScope
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Gets or sets the value of this <see cref="LogColumn"/> is optional on parsing, or not.
     /// </summary>
     public bool Optional
@@ -100,6 +110,10 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
           , Expression);
 
         writer.WriteAttributeString(
+            "GroupScope"
+          , GroupScope);
+
+        writer.WriteAttributeString(
             "Optional"
           , Optional.ToString());
 
@@ -126,6 +140,7 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
       {
         if (node.Attributes["Name"]       == null
         ||  node.Attributes["Expression"] == null
+        ||  node.Attributes["GroupScope"] == null
         ||  node.Attributes["Optional"]   == null
         ||  node.Attributes["Type"]       == null)
         {
@@ -134,6 +149,7 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
 
         Name       = node.Attributes["Name"].Value       ?? Resources.strColumnizerColumnDefaultName;
         Expression = node.Attributes["Expression"].Value ?? Resources.strColumnizerColumnDefaultExpresssion;
+        GroupScope = node.Attributes["GroupScope"].Value ?? "1";
         Optional   = Equals(node.Attributes["Optional"].Value, bool.TrueString);
 
         int typeResult = 0;
@@ -172,6 +188,7 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
       Expression = expression;
       Optional   = optional;
       ColumnType = type;
+      GroupScope = 
     }
 
     #endregion
