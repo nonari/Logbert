@@ -62,7 +62,7 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
     /// Gets or sets the scope if column is multigroup or references a group of a multigroup
     /// column at his scope or references its own regex group of choose.
     /// </summary>
-    public string GroupScope
+    public int GroupScope
     {
         get;
         set;
@@ -111,7 +111,7 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
 
         writer.WriteAttributeString(
             "GroupScope"
-          , GroupScope);
+          , GroupScope.ToString());
 
         writer.WriteAttributeString(
             "Optional"
@@ -149,7 +149,7 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
 
         Name       = node.Attributes["Name"].Value       ?? Resources.strColumnizerColumnDefaultName;
         Expression = node.Attributes["Expression"].Value ?? Resources.strColumnizerColumnDefaultExpresssion;
-        GroupScope = node.Attributes["GroupScope"].Value ?? "1";
+        GroupScope = int.Parse(node.Attributes["GroupScope"].Value ?? "1");
         Optional   = Equals(node.Attributes["Optional"].Value, bool.TrueString);
 
         int typeResult = 0;
@@ -182,13 +182,13 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver
     /// <param name="expression">The <see cref="Regex"/> string of the <see cref="LogColumn"/>.</param>
     /// <param name="optional">The value of this <see cref="LogColumn"/> is optional on parsing, or not.</param>
     /// <param name="type">The <see cref="LogColumnType"/> of the <see cref="LogColumn"/>.</param>
-    public LogColumn(string name, string expression, bool optional, LogColumnType type)
+    public LogColumn(string name, string expression, bool optional, LogColumnType type, int groupScope)
     {
       Name       = name;
       Expression = expression;
       Optional   = optional;
       ColumnType = type;
-      GroupScope = 
+      GroupScope = groupScope;
     }
 
     #endregion

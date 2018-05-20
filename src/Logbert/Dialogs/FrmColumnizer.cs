@@ -87,7 +87,8 @@ namespace Com.Couchcoding.Logbert.Dialogs
               (string)dgvRow.Cells[0].Value
             , (string)dgvRow.Cells[1].Value
             , optional
-            , columnType));
+            , columnType
+            , int.Parse((string)dgvRow.Cells[4].Value ?? "1")));
         }
 
         return mColumnizer;
@@ -116,7 +117,8 @@ namespace Com.Couchcoding.Logbert.Dialogs
               column.Name
             , column.Expression
             , column.Optional
-            , column.ColumnType.ToString());
+            , column.ColumnType.ToString()
+            , column.GroupScope);
         }
 
         UpdateEditButtons();
@@ -413,7 +415,7 @@ namespace Com.Couchcoding.Logbert.Dialogs
       foreach (DataGridViewRow dgvRow in dgvColumns.Rows)
       {
         bool optional = dgvRow.Cells[2].Value != null;
-
+        
         LogColumnType columnType = (LogColumnType)System.Enum.Parse(
             typeof(LogColumnType)
           , (string)dgvRow.Cells[3].Value);
@@ -422,7 +424,8 @@ namespace Com.Couchcoding.Logbert.Dialogs
             (string)dgvRow.Cells[0].Value
           , (string)dgvRow.Cells[1].Value
           , optional
-          , columnType));
+          , columnType
+          , int.Parse((string)dgvRow.Cells[4].Value)));
       }
 
       using (FrmColumnizerTest testColumnizerDlg = new FrmColumnizerTest(tmpColumnizer))
@@ -450,13 +453,13 @@ namespace Com.Couchcoding.Logbert.Dialogs
     /// </summary>
     private void TsbEditDateTimeFormatClick(object sender, System.EventArgs e)
     {
-        using (FrmEditTimeStampFormat logLevelDlg = new FrmEditTimeStampFormat(mColumnizer.DateTimeFormat))
+      using (FrmEditTimeStampFormat logLevelDlg = new FrmEditTimeStampFormat(mColumnizer.DateTimeFormat))
+      {
+        if (logLevelDlg.ShowDialog(this) == DialogResult.OK)
         {
-            if (logLevelDlg.ShowDialog(this) == DialogResult.OK)
-            {
-                mColumnizer.DateTimeFormat = logLevelDlg.DateTimeFormat;
-            }
+          mColumnizer.DateTimeFormat = logLevelDlg.DateTimeFormat;
         }
+      }
     }
 
     #endregion
