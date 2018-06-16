@@ -124,17 +124,29 @@ namespace Com.Couchcoding.Logbert.Logging
     /// <returns><c>True</c> on success, otherwise <c>false</c>.</returns>
     private bool ParseData(string data)
     {
+      int scope = 0;
+      Match multiGroup = null;
       for (int i = 0; i < mColumnizer.Columns.Count; ++i)
       {
-        Match mtc = Regex.Match(data, mColumnizer.Columns[i].Expression);
+        Match mtc;
+        if (scope <= 0)
+        {
+          mtc = Regex.Match(data, mColumnizer.Columns[i].Expression);
+        }
+        else {
+          mtc = multiGroup;
+          scope--;
+        }
 
         if (!mtc.Success && !mColumnizer.Columns[i].Optional)
         {
           return false;
         }
 
+        int group = mColumnizer.Columns[0].GroupScope;
+
         mParsedValue[i] = mtc.Success
-          ? mtc.Groups[1].ToString()
+          ? mtc.Groups[group].ToString()
           : string.Empty;
 
         switch (mColumnizer.Columns[i].ColumnType)
@@ -167,6 +179,12 @@ namespace Com.Couchcoding.Logbert.Logging
           case LogColumnType.Message:
             mMessage = mParsedValue[i];
             break;
+
+          case LogColumnType.Multigroup:
+            scope = mColumnizer.Columns[i].GroupScope;
+            multiGroup = mtc;
+            break;
+            
         }
       }
 
