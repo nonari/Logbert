@@ -216,6 +216,10 @@ namespace Com.Couchcoding.Logbert.Logging
                   Settings.Default.TimestampFormat
                 , CultureInfo.InvariantCulture);
             }
+            if (mColumnizer.Columns[columnIndex - 2].ColumnType == LogColumnType.Multigroup)
+            {
+              return GetValueForColumn(columnIndex + 1);
+            }
 
             return mParsedValue[columnIndex - 2];
           }

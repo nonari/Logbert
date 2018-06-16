@@ -158,10 +158,12 @@ namespace Com.Couchcoding.Logbert.Receiver.CustomReceiver.CustomFileReceiver
 
         foreach (LogColumn lgclm in mColumnizer.Columns)
         {
-          clmDict.Add(clmDict.Count, new LogColumnData(
-            lgclm.Name
-          , true
-          , lgclm.ColumnType == LogColumnType.Message ? 1024 : 100));
+          if (lgclm.ColumnType != LogColumnType.Multigroup) {
+            clmDict.Add(clmDict.Count, new LogColumnData(
+              lgclm.Name
+            , true
+            , lgclm.ColumnType == LogColumnType.Message ? 1024 : 100));
+          }
         }
 
         return clmDict;
