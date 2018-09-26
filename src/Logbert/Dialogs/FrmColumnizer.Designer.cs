@@ -37,6 +37,7 @@
       this.dgvColumns = new Couchcoding.Logbert.Gui.Controls.DataGridViewEx();
       this.clmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.clmRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.clmGroupScope = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.clmOptional = new System.Windows.Forms.DataGridViewCheckBoxColumn();
       this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
       this.pnlGrid = new Couchcoding.Logbert.Gui.Controls.InfoPanel();
@@ -123,7 +124,9 @@
             this.clmName,
             this.clmRegex,
             this.clmOptional,
-            this.clmType});
+            this.clmType,
+            this.clmGroupScope
+      });
       this.dgvColumns.Dock = System.Windows.Forms.DockStyle.Fill;
       this.dgvColumns.Location = new System.Drawing.Point(1, 1);
       this.dgvColumns.MultiSelect = false;
@@ -172,7 +175,8 @@
             "Unknown",
             "Timestamp",
             "Level",
-            "Message"});
+            "Message",
+            "Multigroup"});
       this.clmType.MaxDropDownItems = 4;
       this.clmType.MinimumWidth = 100;
       this.clmType.Name = "clmType";
@@ -338,6 +342,12 @@
       this.nfoPanel.TextPadding = new System.Windows.Forms.Padding(0, 6, 0, 0);
       this.nfoPanel.Title = "";
       // 
+      // clmGroupScope
+      // 
+      this.clmGroupScope.HeaderText = "Grp/Scope";
+      this.clmGroupScope.Name = "clmGroupScope";
+      this.clmGroupScope.Width = 70;
+      // 
       // FrmColumnizer
       // 
       this.AcceptButton = this.btnOk;
@@ -392,6 +402,7 @@
     private System.Windows.Forms.DataGridViewComboBoxColumn clmType;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     private System.Windows.Forms.ToolStripButton tsbEditLogLevels;
-        private System.Windows.Forms.ToolStripButton tsbEditDateTimeFormat;
+    private System.Windows.Forms.DataGridViewTextBoxColumn clmGroupScope;
+    private System.Windows.Forms.ToolStripButton tsbEditDateTimeFormat;
     }
 }

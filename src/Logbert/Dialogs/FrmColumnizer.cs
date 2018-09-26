@@ -88,7 +88,7 @@ namespace Couchcoding.Logbert.Dialogs
             , (string)dgvRow.Cells[1].Value
             , optional
             , columnType
-            , int.Parse((string)dgvRow.Cells[4].Value ?? "1")));
+            , int.Parse((string)dgvRow.Cells[4].Value.ToString() ?? "1")));
         }
 
         return mColumnizer;
