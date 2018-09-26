@@ -31,14 +31,15 @@
 using System;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Properties;
 using System.IO;
 
-using Com.Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Helper;
 using System.Drawing;
+using System.Text;
 
-namespace Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver
+namespace Couchcoding.Logbert.Receiver.SyslogFileReceiver
 {
   /// <summary>
   /// Implements the <see cref="ILogSettingsCtrl"/> control for the Syslog file receiver.
@@ -84,7 +85,24 @@ namespace Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver
         }
 
         chkStartFromBeginning.Checked = Settings.Default.PnlSyslogFileSettingsStartFromBeginning;
-        txtTimestampFormat.Text = Settings.Default.PnlSyslogFileSettingsTimestampFormat;
+        txtTimestampFormat.Text       = Settings.Default.PnlSyslogFileSettingsTimestampFormat;
+      }
+
+      foreach (EncodingInfo encoding in Encoding.GetEncodings())
+      {
+        EncodingWrapper encWrapper = new EncodingWrapper(encoding);
+
+        cmbEncoding.Items.Add(encWrapper);
+
+        if (encoding.CodePage == (ModifierKeys != Keys.Shift ? Settings.Default.PnlSyslogUdpSettingsEncoding : Encoding.Default.CodePage))
+        {
+          cmbEncoding.SelectedItem = encWrapper;
+        }
+      }
+
+      if (cmbEncoding.SelectedItem == null)
+      {
+        cmbEncoding.SelectedIndex = 0;
       }
     }
 
@@ -108,9 +126,7 @@ namespace Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver
     /// </summary>
     private void MnuTimestampPresetClick(object sender, System.EventArgs e)
     {
-      ToolStripMenuItem mnuCtrl = sender as ToolStripMenuItem;
-
-      if (mnuCtrl != null && mnuCtrl.Tag != null)
+      if (sender is MenuItem mnuCtrl && mnuCtrl.Tag != null)
       {
         txtTimestampFormat.Text = mnuCtrl.Tag.ToString();
       }
@@ -121,9 +137,7 @@ namespace Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver
     /// </summary>
     private void MnuTimestampClick(object sender, System.EventArgs e)
     {
-      ToolStripMenuItem mnuCtrl = sender as ToolStripMenuItem;
-
-      if (mnuCtrl != null && mnuCtrl.Tag != null)
+      if (sender is MenuItem mnuCtrl && mnuCtrl.Tag != null)
       {
         txtTimestampFormat.SelectedText = mnuCtrl.Tag.ToString();
       }
@@ -167,14 +181,16 @@ namespace Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver
         Settings.Default.PnlSyslogFileSettingsFile               = txtLogFile.Text;
         Settings.Default.PnlSyslogFileSettingsStartFromBeginning = chkStartFromBeginning.Checked;
         Settings.Default.PnlSyslogFileSettingsTimestampFormat    = txtTimestampFormat.Text;
-
+        Settings.Default.PnlSyslogFileSettingsEncoding           = ((EncodingWrapper)cmbEncoding.SelectedItem).Codepage;
+        
         Settings.Default.SaveSettings();
       }
 
       return new SyslogFileReceiver(
           txtLogFile.Text
         , chkStartFromBeginning.Checked
-        , txtTimestampFormat.Text);
+        , txtTimestampFormat.Text
+        , Settings.Default.PnlSyslogFileSettingsEncoding);
     }
 
     #endregion
@@ -187,8 +203,6 @@ namespace Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver
     public SyslogFileReceiverSettings()
     {
       InitializeComponent();
-
-      ThemeManager.CurrentApplicationTheme.ApplyTo(mnuTimestamp);
     }
 
     #endregion

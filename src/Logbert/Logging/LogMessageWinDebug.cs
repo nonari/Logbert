@@ -28,13 +28,13 @@
 
 #endregion
 
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Properties;
 using MoonSharp.Interpreter;
 using System;
 using System.Globalization;
 
-namespace Com.Couchcoding.Logbert.Logging
+namespace Couchcoding.Logbert.Logging
 {
   /// <summary>
   /// Implements a <see cref="LogMessage"/> class for windows debug messages.
@@ -148,7 +148,7 @@ namespace Com.Couchcoding.Logbert.Logging
         case 2:
           return Level.ToString();
         case 3:
-          return mTimestamp.AddMilliseconds(mTimeShiftOffset).ToString(
+          return mTimestamp.Add(mTimeShiftOffset).ToString(
               Settings.Default.TimestampFormat
             , CultureInfo.InvariantCulture);
         case 4:

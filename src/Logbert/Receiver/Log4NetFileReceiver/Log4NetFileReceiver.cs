@@ -31,14 +31,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-using Com.Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Interfaces;
 
-using Com.Couchcoding.Logbert.Controls;
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Logging;
+using Couchcoding.Logbert.Controls;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Logging;
 
-namespace Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver
+namespace Couchcoding.Logbert.Receiver.Log4NetFileReceiver
 {
   /// <summary>
   /// Implements a <see cref="ILogProvider"/> for the Log4Net file service.
@@ -330,7 +329,8 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver
           mFileToObserve
         , FileMode.Open
         , FileAccess.Read
-        , FileShare.ReadWrite));
+        , FileShare.ReadWrite)
+        , mEncoding);
 
       mLogNumber      = 0;
       mLastFileOffset = mStartFromBeginning
@@ -487,7 +487,8 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver
     /// </summary>
     /// <param name="fileToObserve">The file the new <see cref="Log4NetFileReceiver"/> instance should observe.</param>
     /// <param name="startFromBeginning">Determines whether the new <see cref="Log4NetFileReceiver"/> should read the given <paramref name="fileToObserve"/> from beginnin, or not.</param>
-    public Log4NetFileReceiver(string fileToObserve, bool startFromBeginning)
+    /// <param name="codePage">The codepage to use for encoding of the data to parse.</param>
+    public Log4NetFileReceiver(string fileToObserve, bool startFromBeginning, int codePage) : base (codePage)
     {
       mFileToObserve      = fileToObserve;
       mStartFromBeginning = startFromBeginning;

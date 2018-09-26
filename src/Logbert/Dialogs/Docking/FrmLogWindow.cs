@@ -31,23 +31,28 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Logging;
-using Com.Couchcoding.Logbert.Logging.Filter;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Theme.Palettes;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Logging;
+using Couchcoding.Logbert.Logging.Filter;
+using Couchcoding.Logbert.Properties;
 
 using WeifenLuo.WinFormsUI.Docking;
+using Couchcoding.Logbert.Theme.Interfaces;
+using Couchcoding.Logbert.Theme;
+using Couchcoding.Logbert.Theme.Themes;
 
-namespace Com.Couchcoding.Logbert.Dialogs.Docking
+namespace Couchcoding.Logbert.Dialogs.Docking
 {
   /// <summary>
   /// Implements the <see cref="DockContent"/> of the log message window.
   /// </summary>
-  public partial class FrmLogWindow : DockContent, ILogPresenter, ILogFilterHandler, IBookmarkProvider, ISearchable
+  public partial class FrmLogWindow : DockContent, ILogPresenter, ILogFilterHandler, IBookmarkProvider, ISearchable, IThemable
   {
     #region Private Consts
 
@@ -110,7 +115,7 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
     protected static readonly Image[] mBookmarkImages = 
     {
         Resources.NoBookmark
-      , Resources.bookmark_002_16xMD
+      , ThemeManager.CurrentApplicationTheme.Resources.Images["FrmLogBookmark"]
     };
 
     #endregion
@@ -147,7 +152,7 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
       get
       {
         return dtgLogMessages.SelectedRows.Count > 0
-          ? mFilteredLogMessages[dtgLogMessages.SelectedRows[0].Index]
+          ? mFilteredLogMessages[dtgLogMessages.SelectedRows.OrderByIndex().First().Index]
           : null;
       }
     }
@@ -506,15 +511,18 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
     {
       LogMessage selectedMessage = null;
 
-      if (dtgLogMessages.SelectedRows.Count    == 1
-      &&  dtgLogMessages.SelectedRows[0].Index >= 0
-      &&  dtgLogMessages.SelectedRows[0].Index < mFilteredLogMessages.Count)
-      {
-        selectedMessage = mFilteredLogMessages[dtgLogMessages.SelectedRows[0].Index];
+      if (dtgLogMessages.SelectedRows.Count == 1)
+      { 
+        int messageIndex = dtgLogMessages.SelectedRows.OrderByIndex().First().Index;
 
-        // If a row above the last one is selected, disable the tail feature.
-        mLogcontainer.TailEnabled = dtgLogMessages.SelectedRows[0].Index >= mFilteredLogMessages.Count - 1 
-                                 && Settings.Default.LogWndAutoScrollOnLastMessageSelect;
+        if (messageIndex >= 0 && messageIndex < mFilteredLogMessages.Count)
+        {
+          selectedMessage = mFilteredLogMessages[messageIndex];
+
+          // If a row above the last one is selected, disable the tail feature.
+          mLogcontainer.TailEnabled = messageIndex >= mFilteredLogMessages.Count - 1 
+                                   && Settings.Default.LogWndAutoScrollOnLastMessageSelect;
+        }
       }
 
       OnRaiseLogMessageSelectedEvent(
@@ -545,16 +553,16 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
     {
       if (e.RowIndex >= 0 && e.RowIndex < mFilteredLogMessages.Count && e.ColumnIndex == 0)
       {
-        LogMessage currentMsg = mFilteredLogMessages[dtgLogMessages.SelectedRows[0].Index];
+        LogMessage currentMsg = mFilteredLogMessages[dtgLogMessages.SelectedRows.OrderByIndex().First().Index];
 
         // Toggle the bookmark state.
         if (mBookmarks.Contains(currentMsg))
         {
-          RemoveBookmark(currentMsg);
+          RemoveBookmarks(new List<LogMessage>(new[] { currentMsg }));
         }
         else
         {
-          AddBookmark(currentMsg);
+          AddBookmarks(new List<LogMessage>(new[] { currentMsg }));
         }
       }
     }
@@ -601,7 +609,7 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
 
     private void synchronizeTreeToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      LogMessage selectedMessage = mFilteredLogMessages[dtgLogMessages.SelectedRows[0].Index] as LogMessage;
+      LogMessage selectedMessage = mFilteredLogMessages[dtgLogMessages.SelectedRows.OrderByIndex().First().Index] as LogMessage;
 
       if (selectedMessage != null)
       {
@@ -611,17 +619,26 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
 
     private void CmsToggleBookmarkClick(object sender, EventArgs e)
     {
-      LogMessage selectedMessage = mFilteredLogMessages[dtgLogMessages.SelectedRows[0].Index] as LogMessage;
+      if (mFilteredLogMessages[dtgLogMessages.SelectedRows.OrderByIndex().First().Index] is LogMessage firstMessage)
+      {
+        bool isBookmarked = mBookmarks.Contains(firstMessage);
+        List<LogMessage> selectedMessages = new List<LogMessage>();
+
+        foreach (DataGridViewRow messageRow in dtgLogMessages.SelectedRows)
+        {
+          selectedMessages.Add(mFilteredLogMessages[messageRow.Index]);
+        }
 
         // Toggle the bookmark state.
-        if (mBookmarks.Contains(selectedMessage))
+        if (isBookmarked)
         {
-          RemoveBookmark(selectedMessage);
+          RemoveBookmarks(selectedMessages);
         }
         else
         {
-          AddBookmark(selectedMessage);
+          AddBookmarks(selectedMessages);
         }
+      }
     }
 
     /// <summary>
@@ -727,11 +744,19 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
     /// Adds a new Bookmark for the given <paramref name="message"/>.
     /// </summary>
     /// <param name="message">The <see cref="LogMessage"/> to bookmark.</param>
-    public void AddBookmark(LogMessage message)
+    public void AddBookmarks(List<LogMessage> messages)
     {
-      if (message != null && !mBookmarks.Contains(message))
+      if (messages == null || messages.Count == 0)
       {
-        mBookmarks.Add(message);
+        return;
+      }
+
+      foreach (LogMessage message in messages)
+      {
+        if (!mBookmarks.Contains(message))
+        {
+          mBookmarks.Add(message);
+        }
       }
 
       dtgLogMessages.Invalidate();
@@ -746,11 +771,19 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
     /// Removes the given <paramref name="message"/> from the bookmarks.
     /// </summary>
     /// <param name="message">The <see cref="LogMessage"/> to remove from the bookmarks.</param>
-    public void RemoveBookmark(LogMessage message)
+    public void RemoveBookmarks(List<LogMessage> messages)
     {
-      if (message != null && mBookmarks.Contains(message))
+      if (messages == null || messages.Count == 0)
       {
-        mBookmarks.Remove(message);
+        return;
+      }
+
+      foreach (LogMessage message in messages)
+      {
+        if (mBookmarks.Contains(message))
+        {
+          mBookmarks.Remove(message);
+        }
       }
 
       dtgLogMessages.Invalidate();
@@ -1025,11 +1058,14 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
           // Remember the current selected message.
           LogMessage selectedMessage = null;
 
-          if (dtgLogMessages.SelectedRows.Count == 1
-          && dtgLogMessages.SelectedRows[0].Index >= 0
-          && dtgLogMessages.SelectedRows[0].Index < mFilteredLogMessages.Count)
-          {
-            selectedMessage = mFilteredLogMessages[dtgLogMessages.SelectedRows[0].Index];
+          if (dtgLogMessages.SelectedRows.Count == 1)
+          { 
+            int messageIndex = dtgLogMessages.SelectedRows.OrderByIndex().First().Index;
+
+            if (messageIndex >= 0 && messageIndex < mFilteredLogMessages.Count)
+            {
+              selectedMessage = mFilteredLogMessages[messageIndex];
+            }
           }
 
           // Clear all existing datasets.
@@ -1101,7 +1137,7 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
 
       int currentMessageIndex = dtgLogMessages.SelectedRows.Count == 0 
         ? 0 
-        : dtgLogMessages.SelectedRows[0].Index + 1;
+        : dtgLogMessages.SelectedRows.OrderByIndex().First().Index + 1;
 
       Regex rgxToSeachFor = new Regex(pattern,
         Settings.Default.FrmFindSearchMatchCase 
@@ -1167,6 +1203,37 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
       return columnLayout;
     }
 
+    /// <summary>
+    /// Applies the current theme to the <see cref="Control"/>.
+    /// </summary>
+    /// <param name="theme">The <see cref="BaseTheme"/> instance to apply.</param>
+    public void ApplyTheme(BaseTheme theme)
+    {
+      ThemeManager.ApplyTo(cmColumns);
+      ThemeManager.ApplyTo(cmLogMessage);
+
+      cmdcopytoclipboard.Image = theme.Resources.Images["FrmScriptTbCopy"];
+      cmsToggleBookmark.Image  = theme.Resources.Images["FrmMainTbBookmark"];
+      cmsSynchronizeTree.Image = theme.Resources.Images["FrmMainTbSync"];
+      
+      dtgLogMessages.EnableHeadersVisualStyles             = theme.Metrics.PreferSystemRendering;
+      dtgLogMessages.ColumnHeadersDefaultCellStyle.Padding = theme.Metrics.DataGridViewHeaderColumnPadding;
+
+      dtgLogMessages.BackgroundColor          = theme.ColorPalette.ContentBackground;
+      dtgLogMessages.ForeColor                = theme.ColorPalette.ContentForeground;
+      dtgLogMessages.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+      dtgLogMessages.GridColor                = theme.ColorPalette.DividerColor;
+
+      dtgLogMessages.ColumnHeadersDefaultCellStyle.BackColor          = theme.ColorPalette.ContentBackground;
+      dtgLogMessages.ColumnHeadersDefaultCellStyle.ForeColor          = theme.ColorPalette.ContentForeground;
+      dtgLogMessages.ColumnHeadersDefaultCellStyle.SelectionBackColor = theme.ColorPalette.SelectionBackgroundFocused;
+      dtgLogMessages.ColumnHeadersDefaultCellStyle.SelectionForeColor = theme.ColorPalette.SelectionForegroundFocused;
+
+      dtgLogMessages.CellBorderStyle            = DataGridViewCellBorderStyle.Single;
+      dtgLogMessages.DefaultCellStyle.BackColor = theme.ColorPalette.ContentBackground;
+      dtgLogMessages.DefaultCellStyle.ForeColor = theme.ColorPalette.ContentForeground;
+    }
+
     #endregion
 
     #region Constructor
@@ -1191,8 +1258,7 @@ namespace Com.Couchcoding.Logbert.Dialogs.Docking
         cmLogMessage.Items.Remove(cmsSeperator);
       }
 
-      ThemeManager.CurrentApplicationTheme.ApplyTo(cmColumns);
-      ThemeManager.CurrentApplicationTheme.ApplyTo(cmLogMessage);
+      ThemeManager.ApplyTo(this);
 
       if (!string.IsNullOrEmpty(Settings.Default.LogMessagesFontName))
       {

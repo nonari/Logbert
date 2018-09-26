@@ -33,29 +33,33 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Controls.OptionPanels;
-using Com.Couchcoding.Logbert.Dialogs;
-using Com.Couchcoding.Logbert.Dialogs.Docking;
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Properties;
-using Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver;
+using Couchcoding.Logbert.Controls.OptionPanels;
+using Couchcoding.Logbert.Dialogs;
+using Couchcoding.Logbert.Dialogs.Docking;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Receiver.Log4NetFileReceiver;
 
 using WeifenLuo.WinFormsUI.Docking;
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Receiver.SyslogFileReceiver;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Receiver.SyslogFileReceiver;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
 
-using Com.Couchcoding.Logbert.Receiver;
+using Couchcoding.Logbert.Receiver;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Reflection;
-using Com.Couchcoding.GuiLibrary.Helper;
+using Couchcoding.Logbert.Gui.Helper;
+using Couchcoding.Logbert.Theme.Palettes;
+using Couchcoding.Logbert.Theme.Interfaces;
+using Couchcoding.Logbert.Theme;
+using Couchcoding.Logbert.Theme.Themes;
 
 namespace Logbert
 {
-  public partial class MainForm : Form, ISearchable
+  public partial class MainForm : Form, ISearchable, IThemable
   {
     #region Private Consts
 
@@ -121,15 +125,14 @@ namespace Logbert
     [Localizable(true)]
     public sealed override Font Font
     {
-      get
-      {
-        return base.Font;
-      }
-      set
-      {
-        base.Font = value;
-      }
+      get => base.Font;
+      set => base.Font = value;
     }
+
+    /// <summary>
+    /// Gets the main <see cref="DockPanel"/> of the application.
+    /// </summary>
+    public DockPanel MainDockPanel => mainDockPanel;
 
     #endregion
 
@@ -334,6 +337,8 @@ namespace Logbert
       }
 
       RebuildMruList();
+
+      MruManager.MruListChanged += (_, __) => RebuildMruList();
     }
 
     private void RebuildMruList()
@@ -432,14 +437,14 @@ namespace Logbert
     /// </summary>
     /// <param name="logFileToLoad">The log file to load into a new logger window.</param>
     /// <param name="verbose">[Optional] <c>True</c> to inform the user about any load error, otherwise <c>false</c>. Default is <c>True</c>.</param>
-    private void LoadFileIntoLogger(string logFileToLoad, bool verbose = true)
+    public void LoadFileIntoLogger(string logFileToLoad, bool verbose = true)
     {
       if (!string.IsNullOrEmpty(logFileToLoad) && File.Exists(logFileToLoad))
       {
         ReceiverBase[] knownFileReceiver = 
         {
-            new Log4NetFileReceiver(logFileToLoad, true)
-          , new SyslogFileReceiver (logFileToLoad, true, Settings.Default.PnlSyslogFileSettingsTimestampFormat)
+            new Log4NetFileReceiver(logFileToLoad, true, Settings.Default.PnlLog4NetFileSettingsEncoding)
+          , new SyslogFileReceiver (logFileToLoad, true, Settings.Default.PnlSyslogFileSettingsTimestampFormat, Settings.Default.PnlSyslogFileSettingsEncoding)
         };
 
         foreach (ReceiverBase receiver in knownFileReceiver)
@@ -855,6 +860,23 @@ namespace Logbert
       return true;
     }
 
+    /// <summary>
+    /// Applies the current theme to the <see cref="Control"/>.
+    /// </summary>
+    /// <param name="theme">The <see cref="BaseTheme"/> instance to apply.</param>
+    public void ApplyTheme(BaseTheme theme)
+    {
+      mnuMainFileNewLogger.Image   = theme.Resources.Images["FrmMainTbNew"];
+      mnuMainFileOpelLogFile.Image = theme.Resources.Images["FrmMainTbOpen"];
+      mnuMainFileCloseAll.Image    = theme.Resources.Images["FrmMainTbCloseAll"];
+      mnuMainEditFind.Image        = theme.Resources.Images["FrmMainTbSearch"];
+      mnuMainExtrasOptions.Image   = theme.Resources.Images["FrmMainTbSettings"];
+      mnuMainHelpAbout.Image       = theme.Resources.Images["FrmMainTbAbout"];
+
+      mainDockPanel.Theme = ThemeManager.CurrentApplicationTheme.DockingTheme;
+      mainDockPanel.Theme.ApplyTo(mnuMain);
+    }
+
     #endregion
 
     #region Constructor
@@ -869,7 +891,7 @@ namespace Logbert
 
       InitializeComponent();
 
-      mUpdateLabel = new ToolStripLabel("Update Available")
+      mUpdateLabel = new ToolStripLabel(Resources.strMainUpdateAvailable)
       {
           IsLink           = true
         , Alignment        = ToolStripItemAlignment.Right
@@ -883,11 +905,16 @@ namespace Logbert
 
       MainMenuStrip.Items.Add(mUpdateLabel);
 
-      mainDockPanel.Theme = ThemeManager.CurrentApplicationTheme;
-      mainDockPanel.Theme.ApplyTo(mnuMain);
+      if (Enum.TryParse<Theme>(Settings.Default.ApplicationTheme, out Theme theme))
+      {
+        ThemeManager.SetActiveApplicationTheme(theme);
+      }
+      else 
+      {
+         ThemeManager.SetActiveApplicationTheme(Theme.VisualStudioLight); 
+      }
 
-      mainDockPanel.BackColor       = mainDockPanel.DockBackColor;
-      mainDockPanel.BackgroundImage = Resources.Logbert_Start_Screen;
+      ThemeManager.ApplyTo(this);
 
       // Ensure we're using the systems default dialog font for the main view.
       Font = SystemFonts.MessageBoxFont;
@@ -901,6 +928,9 @@ namespace Logbert
 
       // Create the one and only find window instance.
       mFindWindow = new FrmLogSearch(this);
+
+      // Initialize and show the welcome page.
+      new FrmWelcome(this).Show(mainDockPanel);
 
       LoadFileIntoLogger(logFileToLoad);
     }

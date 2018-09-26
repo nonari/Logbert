@@ -32,13 +32,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Com.Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Interfaces;
 
-using Com.Couchcoding.Logbert.Controls;
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Logging;
+using Couchcoding.Logbert.Controls;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Logging;
 
-namespace Com.Couchcoding.Logbert.Receiver.NLogFileReceiver
+namespace Couchcoding.Logbert.Receiver.NLogFileReceiver
 {
   /// <summary>
   /// Implements a <see cref="ILogProvider"/> for the NLog file service.
@@ -333,7 +333,8 @@ namespace Com.Couchcoding.Logbert.Receiver.NLogFileReceiver
           mFileToObserve
         , FileMode.Open
         , FileAccess.Read
-        , FileShare.ReadWrite));
+        , FileShare.ReadWrite)
+        , mEncoding);
 
       mLogNumber      = 0;
       mLastFileOffset = mStartFromBeginning
@@ -490,7 +491,8 @@ namespace Com.Couchcoding.Logbert.Receiver.NLogFileReceiver
     /// </summary>
     /// <param name="fileToObserve">The file the new <see cref="NLogFileReceiver"/> instance should observe.</param>
     /// <param name="startFromBeginning">Determines whether the new <see cref="NLogFileReceiver"/> should read the given <paramref name="fileToObserve"/> from beginnin, or not.</param>
-    public NLogFileReceiver(string fileToObserve, bool startFromBeginning)
+    /// <param name="codePage">The codepage to use for encoding of the data to parse.</param>
+    public NLogFileReceiver(string fileToObserve, bool startFromBeginning, int codePage) : base (codePage)
     {
       mFileToObserve      = fileToObserve;
       mStartFromBeginning = startFromBeginning;

@@ -33,20 +33,20 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Properties;
 using System.Net.Sockets;
 
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Receiver.CustomReceiver.CustomUdpReceiver;
-using Com.Couchcoding.Logbert.Dialogs;
-using Com.Couchcoding.Logbert.Receiver.CustomReceiver;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Receiver.CustomReceiver.CustomUdpReceiver;
+using Couchcoding.Logbert.Dialogs;
+using Couchcoding.Logbert.Receiver.CustomReceiver;
 using System.Xml;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
+namespace Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
 {
   /// <summary>
   /// Implements the <see cref="ILogSettingsCtrl"/> control for the custom UDP receiver.
@@ -491,6 +491,23 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
         chkMulticastGroup.Checked = Settings.Default.PnlCustomUdpSettingsJoinMulticast;
       }
 
+      foreach (EncodingInfo encoding in Encoding.GetEncodings())
+      {
+        EncodingWrapper encWrapper = new EncodingWrapper(encoding);
+
+        cmbEncoding.Items.Add(encWrapper);
+
+        if (encoding.CodePage == (ModifierKeys != Keys.Shift ? Settings.Default.PnlSyslogUdpSettingsEncoding : Encoding.Default.CodePage))
+        {
+          cmbEncoding.SelectedItem = encWrapper;
+        }
+      }
+
+      if (cmbEncoding.SelectedItem == null)
+      {
+        cmbEncoding.SelectedIndex = 0;
+      }
+
       UpdateEditButtons();
     }
 
@@ -551,6 +568,7 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
                 Settings.Default.PnlCustomUdpSettingsPort             = (int)nudPort.Value;
                 Settings.Default.PnlCustomUdpSettingsJoinMulticast    = chkMulticastGroup.Checked;
                 Settings.Default.PnlCustomUdpSettingsMulticastAddress = txtMulticastIp.Text;
+                Settings.Default.PnlCustomUdpSettingsEncoding         = ((EncodingWrapper)cmbEncoding.SelectedItem).Codepage;
 
                 Settings.Default.SaveSettings();
               }
@@ -559,7 +577,8 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
                   ? IPAddress.Parse(txtMulticastIp.Text.Trim()) 
                   : null
                 , new IPEndPoint(ipAddress.Address, (int)nudPort.Value)
-                , cmbColumnizer.SelectedItem as Columnizer);
+                , cmbColumnizer.SelectedItem as Columnizer
+                , Settings.Default.PnlCustomUdpSettingsEncoding);
             }
           }
         }

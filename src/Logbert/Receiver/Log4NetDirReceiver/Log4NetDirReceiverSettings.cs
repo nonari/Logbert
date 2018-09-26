@@ -32,13 +32,14 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Properties;
 using System.IO;
+using System.Text;
 
-using Com.Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Helper;
 
-namespace Com.Couchcoding.Logbert.Receiver.Log4NetDirReceiver
+namespace Couchcoding.Logbert.Receiver.Log4NetDirReceiver
 {
   /// <summary>
   /// Implements the <see cref="ILogSettingsCtrl"/> control for the Log4Net file receiver.
@@ -81,15 +82,24 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetDirReceiver
     }
 
     /// <summary>
-    /// Handles the Click event of a file pattern preset <see cref="ToolStripMenuItem"/>.
+    /// Handles the Click event of a file pattern preset <see cref="MenuItem"/>.
+    /// </summary>
+    private void MnuFilePatternPresetClick(object sender, EventArgs e)
+    {
+      if (sender is MenuItem mnuCtrl && mnuCtrl.Tag != null)
+      {
+        txtLogFilePattern.Text = mnuCtrl.Tag.ToString();
+      }
+    }
+
+    /// <summary>
+    /// Handles the Click event of a file pattern preset <see cref="MenuItem"/>.
     /// </summary>
     private void MnuFilePatternClick(object sender, EventArgs e)
     {
-      ToolStripMenuItem mnuCtrl = sender as ToolStripMenuItem;
-
-      if (mnuCtrl?.Tag != null)
+      if (sender is MenuItem mnuCtrl && mnuCtrl.Tag != null)
       {
-        txtLogFilePattern.Text = mnuCtrl.Tag.ToString();
+        txtLogFilePattern.SelectedText = mnuCtrl.Tag.ToString();
       }
     }
 
@@ -110,6 +120,23 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetDirReceiver
 
         txtLogFilePattern.Text    = Settings.Default.PnlLog4NetDirectorySettingsPattern ;
         chkInitialReadAll.Checked = Settings.Default.PnlLog4NetDirectorySettingsReadAllExisting;
+      }
+
+      foreach (EncodingInfo encoding in Encoding.GetEncodings())
+      {
+        EncodingWrapper encWrapper = new EncodingWrapper(encoding);
+
+        cmbEncoding.Items.Add(encWrapper);
+
+        if (encoding.CodePage == (ModifierKeys != Keys.Shift ? Settings.Default.PnlSyslogUdpSettingsEncoding : Encoding.Default.CodePage))
+        {
+          cmbEncoding.SelectedItem = encWrapper;
+        }
+      }
+
+      if (cmbEncoding.SelectedItem == null)
+      {
+        cmbEncoding.SelectedIndex = 0;
       }
     }
 
@@ -154,6 +181,7 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetDirReceiver
         Settings.Default.PnlLog4NetDirectorySettingsDirectory       = txtLogDirectory.Text;
         Settings.Default.PnlLog4NetDirectorySettingsPattern         = txtLogFilePattern.Text;
         Settings.Default.PnlLog4NetDirectorySettingsReadAllExisting = chkInitialReadAll.Checked;
+        Settings.Default.PnlLog4NetDirectorySettingsEncoding        = ((EncodingWrapper)cmbEncoding.SelectedItem).Codepage;
 
         Settings.Default.SaveSettings();
       }
@@ -161,7 +189,8 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetDirReceiver
       return new Log4NetDirReceiver(
           txtLogDirectory.Text
         , txtLogFilePattern.Text
-        , chkInitialReadAll.Checked);
+        , chkInitialReadAll.Checked
+        , Settings.Default.PnlLog4NetDirectorySettingsEncoding);
     }
 
     #endregion
@@ -174,8 +203,6 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetDirReceiver
     public Log4NetDirReceiverSettings()
     {
       InitializeComponent();
-
-      ThemeManager.CurrentApplicationTheme.ApplyTo(mnuFilePattern);
     }
 
     #endregion

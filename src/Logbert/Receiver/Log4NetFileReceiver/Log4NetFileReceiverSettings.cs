@@ -31,13 +31,14 @@
 using System;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Properties;
 using System.IO;
+using System.Text;
 
-using Com.Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Helper;
 
-namespace Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver
+namespace Couchcoding.Logbert.Receiver.Log4NetFileReceiver
 {
   /// <summary>
   /// Implements the <see cref="ILogSettingsCtrl"/> control for the Log4Net file receiver.
@@ -84,6 +85,23 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver
 
         chkStartFromBeginning.Checked = Settings.Default.PnlLog4NetFileSettingsStartFromBeginning;
       }
+
+      foreach (EncodingInfo encoding in Encoding.GetEncodings())
+      {
+        EncodingWrapper encWrapper = new EncodingWrapper(encoding);
+
+        cmbEncoding.Items.Add(encWrapper);
+
+        if (encoding.CodePage == (ModifierKeys != Keys.Shift ? Settings.Default.PnlSyslogUdpSettingsEncoding : Encoding.Default.CodePage))
+        {
+          cmbEncoding.SelectedItem = encWrapper;
+        }
+      }
+
+      if (cmbEncoding.SelectedItem == null)
+      {
+        cmbEncoding.SelectedIndex = 0;
+      }
     }
 
     #endregion
@@ -118,13 +136,15 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetFileReceiver
         // Save the current settings as new default values.
         Settings.Default.PnlLog4NetFileSettingsFile               = txtLogFile.Text;
         Settings.Default.PnlLog4NetFileSettingsStartFromBeginning = chkStartFromBeginning.Checked;
+        Settings.Default.PnlLog4NetFileSettingsEncoding           = ((EncodingWrapper)cmbEncoding.SelectedItem).Codepage;
 
         Settings.Default.SaveSettings();
       }
 
       return new Log4NetFileReceiver(
           txtLogFile.Text
-        , chkStartFromBeginning.Checked);
+        , chkStartFromBeginning.Checked
+        , Settings.Default.PnlLog4NetFileSettingsEncoding);
     }
 
     #endregion

@@ -32,20 +32,20 @@ using System;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Properties;
 using System.Net.Sockets;
 
-using Com.Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Helper;
 using System.Net;
 using System.Collections.Generic;
-using Com.Couchcoding.Logbert.Receiver.CustomReceiver;
+using Couchcoding.Logbert.Receiver.CustomReceiver;
 using System.IO;
 using System.Xml;
 using System.Text;
-using Com.Couchcoding.Logbert.Dialogs;
+using Couchcoding.Logbert.Dialogs;
 
-namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
+namespace Couchcoding.Logbert.Receiver.NlogTcpReceiver
 {
   /// <summary>
   /// Implements the <see cref="ILogSettingsCtrl"/> control for the custom TCP receiver.
@@ -476,6 +476,23 @@ namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
         nudPort.Value = Settings.Default.PnlNLogTcpSettingsPort;
       }
 
+      foreach (EncodingInfo encoding in Encoding.GetEncodings())
+      {
+        EncodingWrapper encWrapper = new EncodingWrapper(encoding);
+
+        cmbEncoding.Items.Add(encWrapper);
+
+        if (encoding.CodePage == (ModifierKeys != Keys.Shift ? Settings.Default.PnlSyslogUdpSettingsEncoding : Encoding.Default.CodePage))
+        {
+          cmbEncoding.SelectedItem = encWrapper;
+        }
+      }
+
+      if (cmbEncoding.SelectedItem == null)
+      {
+        cmbEncoding.SelectedIndex = 0;
+      }
+
       UpdateEditButtons();
     }
 
@@ -522,6 +539,7 @@ namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
                 // Save the current settings as new default values.
                 Settings.Default.PnlCustomTcpSettingsInterface = cmbNetworkInterface.SelectedItem.ToString();
                 Settings.Default.PnlCustomTcpSettingsPort      = (int)nudPort.Value;
+                Settings.Default.PnlCustomTcpSettingsEncoding  = ((EncodingWrapper)cmbEncoding.SelectedItem).Codepage;
 
                 Settings.Default.SaveSettings();
               }
@@ -529,7 +547,8 @@ namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
               return new CustomTcpReceiver(
                   (int)nudPort.Value
                 , new IPEndPoint(ipAddress.Address, (int)nudPort.Value)
-                , cmbColumnizer.SelectedItem as Columnizer);
+                , cmbColumnizer.SelectedItem as Columnizer
+                , Settings.Default.PnlCustomTcpSettingsEncoding);
             }
           }
         }

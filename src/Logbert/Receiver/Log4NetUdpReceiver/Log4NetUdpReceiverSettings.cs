@@ -33,13 +33,14 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Properties;
 using System.Net.Sockets;
+using System.Text;
 
-using Com.Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Helper;
 
-namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
+namespace Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
 {
   /// <summary>
   /// Implements the <see cref="ILogSettingsCtrl"/> control for the Log4Net UDP receiver.
@@ -233,6 +234,23 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
         txtMulticastIp.Text       = Settings.Default.PnlLog4NetUdpSettingsMulticastAddress;
         chkMulticastGroup.Checked = Settings.Default.PnlLog4NetUdpSettingsJoinMulticast;
       }
+
+      foreach (EncodingInfo encoding in Encoding.GetEncodings())
+      {
+        EncodingWrapper encWrapper = new EncodingWrapper(encoding);
+
+        cmbEncoding.Items.Add(encWrapper);
+
+        if (encoding.CodePage == (ModifierKeys != Keys.Shift ? Settings.Default.PnlSyslogUdpSettingsEncoding : Encoding.Default.CodePage))
+        {
+          cmbEncoding.SelectedItem = encWrapper;
+        }
+      }
+
+      if (cmbEncoding.SelectedItem == null)
+      {
+        cmbEncoding.SelectedIndex = 0;
+      }
     }
 
     #endregion
@@ -290,6 +308,7 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
                 Settings.Default.PnlLog4NetUdpSettingsPort             = (int)nudPort.Value;
                 Settings.Default.PnlLog4NetUdpSettingsJoinMulticast    = chkMulticastGroup.Checked;
                 Settings.Default.PnlLog4NetUdpSettingsMulticastAddress = txtMulticastIp.Text;
+                Settings.Default.PnlLog4NetUdpSettingsEncoding         = ((EncodingWrapper)cmbEncoding.SelectedItem).Codepage;
 
                 Settings.Default.SaveSettings();
               }
@@ -297,7 +316,8 @@ namespace Com.Couchcoding.Logbert.Receiver.Log4NetUdpReceiver
               return new Log4NetUdpReceiver(chkMulticastGroup.Checked 
                   ? IPAddress.Parse(txtMulticastIp.Text.Trim()) 
                   : null
-                , new IPEndPoint(ipAddress.Address, (int)nudPort.Value));
+                , new IPEndPoint(ipAddress.Address, (int)nudPort.Value)
+                , Settings.Default.PnlLog4NetUdpSettingsEncoding);
             }
           }
         }

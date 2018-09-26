@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Com.Couchcoding.Logbert.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Couchcoding.Logbert.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="BackgroundColorTrace" Type="System.Drawing.Color" Scope="User">
@@ -466,6 +466,60 @@
     </Setting>
     <Setting Name="PnlSyslogUdpSettingsTimestampFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">MMM d HH:mm:ss</Value>
+    </Setting>
+    <Setting Name="ApplicationTheme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Visual Studio Light</Value>
+    </Setting>
+    <Setting Name="PnlSyslogFileSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlSyslogUdpSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlNLogUdpSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlNLogTcpSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlNLogFileSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlNLogDirectorySettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlLog4NetFileSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlLog4NetDirectorySettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlLog4NetUdpSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlCustomFileSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlCustomDirectorySettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlCustomUdpSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlCustomTcpSettingsEncoding" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="TimeShiftValue" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="TimeShiftUnitIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="PnlNLogDirSettingsEncoding" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1252</Value>
+    </Setting>
+    <Setting Name="PnlCustomDirSettingsEncoding" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1252</Value>
     </Setting>
   </Settings>
 </SettingsFile>

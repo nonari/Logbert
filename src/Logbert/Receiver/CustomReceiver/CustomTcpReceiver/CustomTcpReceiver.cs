@@ -35,16 +35,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Interfaces;
+using Couchcoding.Logbert.Interfaces;
 
-using Com.Couchcoding.Logbert.Controls;
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Logging;
-using Com.Couchcoding.Logbert.Receiver.CustomReceiver;
+using Couchcoding.Logbert.Controls;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Logging;
+using Couchcoding.Logbert.Receiver.CustomReceiver;
 
-namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
+namespace Couchcoding.Logbert.Receiver.NlogTcpReceiver
 {
   /// <summary>
   /// Implements a <see cref="ILogProvider"/> for the custom TCP service.
@@ -262,7 +261,7 @@ namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
                     , 0
                     , receivedBytes.Length);
 
-                  receivedMessage.Append(Encoding.ASCII.GetString(
+                  receivedMessage.Append(mEncoding.GetString(
                       receivedBytes
                     , 0
                     , receivedByteCount));
@@ -419,7 +418,8 @@ namespace Com.Couchcoding.Logbert.Receiver.NlogTcpReceiver
     /// </summary>
     /// <param name="port">The port to listen on for new <see cref="LogMessage"/>s</param>
     /// <param name="listenInterface">The network interface to listen on.</param>
-    public CustomTcpReceiver(int port, IPEndPoint listenInterface, Columnizer columnizer)
+    /// <param name="codePage">The codepage to use for encoding of the data to parse.</param>
+    public CustomTcpReceiver(int port, IPEndPoint listenInterface, Columnizer columnizer, int codePage) : base (codePage)
     {
       mPort            = port;
       mListenInterface = listenInterface;

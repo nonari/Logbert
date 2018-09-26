@@ -1,4 +1,4 @@
-﻿namespace Com.Couchcoding.Logbert.Dialogs
+﻿namespace Couchcoding.Logbert.Dialogs
 {
   partial class FrmColumnizer
   {
@@ -34,9 +34,13 @@
       this.lblName = new System.Windows.Forms.Label();
       this.txtName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.dgvColumns = new Com.Couchcoding.GuiLibrary.Controls.DataGridViewEx();
-      this.pnlGrid = new Com.Couchcoding.GuiLibrary.Controls.InfoPanel();
-      this.tsColumns = new Com.Couchcoding.GuiLibrary.Controls.ToolStripEx();
+      this.dgvColumns = new Couchcoding.Logbert.Gui.Controls.DataGridViewEx();
+      this.clmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.clmRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.clmOptional = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+      this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+      this.pnlGrid = new Couchcoding.Logbert.Gui.Controls.InfoPanel();
+      this.tsColumns = new Couchcoding.Logbert.Gui.Controls.ToolStripEx();
       this.tsbAddColumn = new System.Windows.Forms.ToolStripButton();
       this.tsbRemoveColumn = new System.Windows.Forms.ToolStripButton();
       this.tsbEditColumn = new System.Windows.Forms.ToolStripButton();
@@ -48,12 +52,7 @@
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
       this.tsbEditLogLevels = new System.Windows.Forms.ToolStripButton();
       this.tsbEditDateTimeFormat = new System.Windows.Forms.ToolStripButton();
-      this.nfoPanel = new Com.Couchcoding.GuiLibrary.Controls.InfoPanel();
-      this.clmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.clmRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.clmOptional = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-      this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-      this.clmGroupScope = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.nfoPanel = new Couchcoding.Logbert.Gui.Controls.InfoPanel();
       ((System.ComponentModel.ISupportInitialize)(this.dgvColumns)).BeginInit();
       this.pnlGrid.SuspendLayout();
       this.tsColumns.SuspendLayout();
@@ -95,8 +94,8 @@
       // 
       // txtName
       // 
-      this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-      | System.Windows.Forms.AnchorStyles.Right)));
+      this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.txtName.Location = new System.Drawing.Point(8, 86);
       this.txtName.Name = "txtName";
       this.txtName.Size = new System.Drawing.Size(608, 23);
@@ -124,8 +123,7 @@
             this.clmName,
             this.clmRegex,
             this.clmOptional,
-            this.clmType,
-            this.clmGroupScope});
+            this.clmType});
       this.dgvColumns.Dock = System.Windows.Forms.DockStyle.Fill;
       this.dgvColumns.Location = new System.Drawing.Point(1, 1);
       this.dgvColumns.MultiSelect = false;
@@ -138,166 +136,6 @@
       this.dgvColumns.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvColumnsCellEndEdit);
       this.dgvColumns.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.DgvColumnsEditingControlShowing);
       this.dgvColumns.SelectionChanged += new System.EventHandler(this.DgvColumnsSelectionChanged);
-      // 
-      // pnlGrid
-      // 
-      this.pnlGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-              | System.Windows.Forms.AnchorStyles.Left)
-              | System.Windows.Forms.AnchorStyles.Right)));
-      this.pnlGrid.BackColor = System.Drawing.SystemColors.Control;
-      this.pnlGrid.BorderColor = System.Drawing.SystemColors.ControlDark;
-      this.pnlGrid.Controls.Add(this.dgvColumns);
-      this.pnlGrid.Location = new System.Drawing.Point(8, 161);
-      this.pnlGrid.Name = "pnlGrid";
-      this.pnlGrid.Padding = new System.Windows.Forms.Padding(1);
-      this.pnlGrid.Size = new System.Drawing.Size(608, 186);
-      this.pnlGrid.TabIndex = 4;
-      this.pnlGrid.TextPadding = new System.Windows.Forms.Padding(0, 0, 0, 0);
-      this.pnlGrid.Title = null;
-      // 
-      // tsColumns
-      // 
-      this.tsColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.tsColumns.CanOverflow = false;
-      this.tsColumns.Dock = System.Windows.Forms.DockStyle.None;
-      this.tsColumns.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-      this.tsColumns.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-      this.tsbAddColumn,
-      this.tsbRemoveColumn,
-      this.tsbEditColumn,
-      this.toolStripSeparator1,
-      this.tsbMoveUp,
-      this.tsbMoveDown,
-      this.toolStripSeparator2,
-      this.tsbTestColumnizer,
-      this.toolStripSeparator3,
-      this.tsbEditLogLevels,
-      this.tsbEditDateTimeFormat});
-      this.tsColumns.Location = new System.Drawing.Point(410, 133);
-      this.tsColumns.Name = "tsColumns";
-      this.tsColumns.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.tsColumns.Size = new System.Drawing.Size(206, 25);
-      this.tsColumns.TabIndex = 3;
-      this.tsColumns.Text = "Columns";
-      // 
-      // tsbAddColumn
-      // 
-      this.tsbAddColumn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbAddColumn.Image = global::Com.Couchcoding.Logbert.Properties.Resources.action_add_16xMD;
-      this.tsbAddColumn.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbAddColumn.Name = "tsbAddColumn";
-      this.tsbAddColumn.Size = new System.Drawing.Size(23, 22);
-      this.tsbAddColumn.Text = "Add Column";
-      this.tsbAddColumn.Click += new System.EventHandler(this.TsbAddColumnClick);
-      // 
-      // tsbRemoveColumn
-      // 
-      this.tsbRemoveColumn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbRemoveColumn.Enabled = false;
-      this.tsbRemoveColumn.Image = global::Com.Couchcoding.Logbert.Properties.Resources.Remove_16xMD;
-      this.tsbRemoveColumn.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbRemoveColumn.Margin = new System.Windows.Forms.Padding(0, 1, 1, 2);
-      this.tsbRemoveColumn.Name = "tsbRemoveColumn";
-      this.tsbRemoveColumn.Size = new System.Drawing.Size(23, 22);
-      this.tsbRemoveColumn.Text = "Remove Column";
-      this.tsbRemoveColumn.Click += new System.EventHandler(this.TsbRemoveColumnClick);
-      // 
-      // tsbEditColumn
-      // 
-      this.tsbEditColumn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbEditColumn.Enabled = false;
-      this.tsbEditColumn.Image = global::Com.Couchcoding.Logbert.Properties.Resources.PencilAngled_16xMD_color;
-      this.tsbEditColumn.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbEditColumn.Name = "tsbEditColumn";
-      this.tsbEditColumn.Size = new System.Drawing.Size(23, 22);
-      this.tsbEditColumn.Text = "Edit Column";
-      this.tsbEditColumn.Click += new System.EventHandler(this.TsbEditColumnClick);
-      // 
-      // toolStripSeparator1
-      // 
-      this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-      // 
-      // tsbMoveUp
-      // 
-      this.tsbMoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbMoveUp.Enabled = false;
-      this.tsbMoveUp.Image = global::Com.Couchcoding.Logbert.Properties.Resources.arrow_Up_16xLG;
-      this.tsbMoveUp.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbMoveUp.Name = "tsbMoveUp";
-      this.tsbMoveUp.Size = new System.Drawing.Size(23, 22);
-      this.tsbMoveUp.Text = "Move Up";
-      this.tsbMoveUp.Click += new System.EventHandler(this.TsbMoveUpClick);
-      // 
-      // tsbMoveDown
-      // 
-      this.tsbMoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbMoveDown.Enabled = false;
-      this.tsbMoveDown.Image = global::Com.Couchcoding.Logbert.Properties.Resources.arrow_Down_16xLG;
-      this.tsbMoveDown.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbMoveDown.Name = "tsbMoveDown";
-      this.tsbMoveDown.Size = new System.Drawing.Size(23, 22);
-      this.tsbMoveDown.Text = "Move Down";
-      this.tsbMoveDown.Click += new System.EventHandler(this.TsbMoveDownClick);
-      // 
-      // toolStripSeparator2
-      // 
-      this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-      // 
-      // tsbTestColumnizer
-      // 
-      this.tsbTestColumnizer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbTestColumnizer.Enabled = false;
-      this.tsbTestColumnizer.Image = global::Com.Couchcoding.Logbert.Properties.Resources.RunTests_8790;
-      this.tsbTestColumnizer.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbTestColumnizer.Name = "tsbTestColumnizer";
-      this.tsbTestColumnizer.Size = new System.Drawing.Size(23, 22);
-      this.tsbTestColumnizer.Text = "Test Columnizer";
-      this.tsbTestColumnizer.Click += new System.EventHandler(this.TsbTestColumnizerClick);
-      // 
-      // toolStripSeparator3
-      // 
-      this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-      // 
-      // tsbEditLogLevels
-      // 
-      this.tsbEditLogLevels.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbEditLogLevels.Image = global::Com.Couchcoding.Logbert.Properties.Resources.LogLevel_16x;
-      this.tsbEditLogLevels.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbEditLogLevels.Name = "tsbEditLogLevels";
-      this.tsbEditLogLevels.Size = new System.Drawing.Size(23, 22);
-      this.tsbEditLogLevels.Text = "Edit Log Levels";
-      this.tsbEditLogLevels.Click += new System.EventHandler(this.TsbEditLogLevelsClick);
-      // 
-      // tsbEditDateTimeFormat
-      // 
-      this.tsbEditDateTimeFormat.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.tsbEditDateTimeFormat.Image = global::Com.Couchcoding.Logbert.Properties.Resources.VSO_Time_16x;
-      this.tsbEditDateTimeFormat.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.tsbEditDateTimeFormat.Name = "tsbEditDateTimeFormat";
-      this.tsbEditDateTimeFormat.Size = new System.Drawing.Size(23, 22);
-      this.tsbEditDateTimeFormat.Text = "Set Timestamp Format";
-      this.tsbEditDateTimeFormat.Click += new System.EventHandler(this.TsbEditDateTimeFormatClick);
-      // 
-      // nfoPanel
-      // 
-      this.nfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-      | System.Windows.Forms.AnchorStyles.Right)));
-      this.nfoPanel.BackColor = System.Drawing.Color.WhiteSmoke;
-      this.nfoPanel.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-      this.nfoPanel.InfoIcon = global::Com.Couchcoding.Logbert.Properties.Resources.StatusAnnotations_Information_16xLG;
-      this.nfoPanel.Location = new System.Drawing.Point(8, 353);
-      this.nfoPanel.Name = "nfoPanel";
-      this.nfoPanel.ShowInfoIcon = true;
-      this.nfoPanel.ShowTitle = false;
-      this.nfoPanel.Size = new System.Drawing.Size(608, 48);
-      this.nfoPanel.TabIndex = 5;
-      this.nfoPanel.Text = "Note: The columns for bookmarks and log numbers will always be added and each reg" +
-  "ular expression needs a grouped item.";
-      this.nfoPanel.TextPadding = new System.Windows.Forms.Padding(0, 6, 0, 0);
-      this.nfoPanel.Title = "";
       // 
       // clmName
       // 
@@ -331,21 +169,174 @@
       this.clmType.FlatStyle = System.Windows.Forms.FlatStyle.System;
       this.clmType.HeaderText = "Type";
       this.clmType.Items.AddRange(new object[] {
-      "Unknown",
-      "Timestamp",
-      "Level",
-      "Message",
-      "Multigroup"});
+            "Unknown",
+            "Timestamp",
+            "Level",
+            "Message"});
       this.clmType.MaxDropDownItems = 4;
       this.clmType.MinimumWidth = 100;
       this.clmType.Name = "clmType";
       this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
       // 
-      // clmGroupScope
+      // pnlGrid
       // 
-      this.clmGroupScope.HeaderText = "Grp/Scope";
-      this.clmGroupScope.Name = "clmGroupScope";
-      this.clmGroupScope.Width = 70;
+      this.pnlGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.pnlGrid.BackColor = System.Drawing.SystemColors.Control;
+      this.pnlGrid.BorderColor = System.Drawing.SystemColors.ControlDark;
+      this.pnlGrid.Controls.Add(this.dgvColumns);
+      this.pnlGrid.Location = new System.Drawing.Point(8, 161);
+      this.pnlGrid.Name = "pnlGrid";
+      this.pnlGrid.Padding = new System.Windows.Forms.Padding(1);
+      this.pnlGrid.Size = new System.Drawing.Size(608, 186);
+      this.pnlGrid.TabIndex = 4;
+      this.pnlGrid.TextPadding = new System.Windows.Forms.Padding(0, 0, 0, 0);
+      this.pnlGrid.Title = null;
+      // 
+      // tsColumns
+      // 
+      this.tsColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.tsColumns.CanOverflow = false;
+      this.tsColumns.Dock = System.Windows.Forms.DockStyle.None;
+      this.tsColumns.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+      this.tsColumns.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbAddColumn,
+            this.tsbRemoveColumn,
+            this.tsbEditColumn,
+            this.toolStripSeparator1,
+            this.tsbMoveUp,
+            this.tsbMoveDown,
+            this.toolStripSeparator2,
+            this.tsbTestColumnizer,
+            this.toolStripSeparator3,
+            this.tsbEditLogLevels,
+            this.tsbEditDateTimeFormat});
+      this.tsColumns.Location = new System.Drawing.Point(410, 133);
+      this.tsColumns.Name = "tsColumns";
+      this.tsColumns.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+      this.tsColumns.Size = new System.Drawing.Size(206, 25);
+      this.tsColumns.TabIndex = 3;
+      this.tsColumns.Text = "Columns";
+      // 
+      // tsbAddColumn
+      // 
+      this.tsbAddColumn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbAddColumn.Image = global::Couchcoding.Logbert.Properties.Resources.action_add_16xMD;
+      this.tsbAddColumn.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbAddColumn.Name = "tsbAddColumn";
+      this.tsbAddColumn.Size = new System.Drawing.Size(23, 22);
+      this.tsbAddColumn.Text = "Add Column";
+      this.tsbAddColumn.Click += new System.EventHandler(this.TsbAddColumnClick);
+      // 
+      // tsbRemoveColumn
+      // 
+      this.tsbRemoveColumn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbRemoveColumn.Enabled = false;
+      this.tsbRemoveColumn.Image = global::Couchcoding.Logbert.Properties.Resources.Remove_16xMD;
+      this.tsbRemoveColumn.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbRemoveColumn.Margin = new System.Windows.Forms.Padding(0, 1, 1, 2);
+      this.tsbRemoveColumn.Name = "tsbRemoveColumn";
+      this.tsbRemoveColumn.Size = new System.Drawing.Size(23, 22);
+      this.tsbRemoveColumn.Text = "Remove Column";
+      this.tsbRemoveColumn.Click += new System.EventHandler(this.TsbRemoveColumnClick);
+      // 
+      // tsbEditColumn
+      // 
+      this.tsbEditColumn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbEditColumn.Enabled = false;
+      this.tsbEditColumn.Image = global::Couchcoding.Logbert.Properties.Resources.PencilAngled_16xMD_color;
+      this.tsbEditColumn.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbEditColumn.Name = "tsbEditColumn";
+      this.tsbEditColumn.Size = new System.Drawing.Size(23, 22);
+      this.tsbEditColumn.Text = "Edit Column";
+      this.tsbEditColumn.Click += new System.EventHandler(this.TsbEditColumnClick);
+      // 
+      // toolStripSeparator1
+      // 
+      this.toolStripSeparator1.Name = "toolStripSeparator1";
+      this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+      // 
+      // tsbMoveUp
+      // 
+      this.tsbMoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbMoveUp.Enabled = false;
+      this.tsbMoveUp.Image = global::Couchcoding.Logbert.Properties.Resources.arrow_Up_16xLG;
+      this.tsbMoveUp.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbMoveUp.Name = "tsbMoveUp";
+      this.tsbMoveUp.Size = new System.Drawing.Size(23, 22);
+      this.tsbMoveUp.Text = "Move Up";
+      this.tsbMoveUp.Click += new System.EventHandler(this.TsbMoveUpClick);
+      // 
+      // tsbMoveDown
+      // 
+      this.tsbMoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbMoveDown.Enabled = false;
+      this.tsbMoveDown.Image = global::Couchcoding.Logbert.Properties.Resources.arrow_Down_16xLG;
+      this.tsbMoveDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbMoveDown.Name = "tsbMoveDown";
+      this.tsbMoveDown.Size = new System.Drawing.Size(23, 22);
+      this.tsbMoveDown.Text = "Move Down";
+      this.tsbMoveDown.Click += new System.EventHandler(this.TsbMoveDownClick);
+      // 
+      // toolStripSeparator2
+      // 
+      this.toolStripSeparator2.Name = "toolStripSeparator2";
+      this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+      // 
+      // tsbTestColumnizer
+      // 
+      this.tsbTestColumnizer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbTestColumnizer.Enabled = false;
+      this.tsbTestColumnizer.Image = global::Couchcoding.Logbert.Properties.Resources.RunTests_8790;
+      this.tsbTestColumnizer.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbTestColumnizer.Name = "tsbTestColumnizer";
+      this.tsbTestColumnizer.Size = new System.Drawing.Size(23, 22);
+      this.tsbTestColumnizer.Text = "Test Columnizer";
+      this.tsbTestColumnizer.Click += new System.EventHandler(this.TsbTestColumnizerClick);
+      // 
+      // toolStripSeparator3
+      // 
+      this.toolStripSeparator3.Name = "toolStripSeparator3";
+      this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+      // 
+      // tsbEditLogLevels
+      // 
+      this.tsbEditLogLevels.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbEditLogLevels.Image = global::Couchcoding.Logbert.Properties.Resources.LogLevel_16x;
+      this.tsbEditLogLevels.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbEditLogLevels.Name = "tsbEditLogLevels";
+      this.tsbEditLogLevels.Size = new System.Drawing.Size(23, 22);
+      this.tsbEditLogLevels.Text = "Edit Log Levels";
+      this.tsbEditLogLevels.Click += new System.EventHandler(this.TsbEditLogLevelsClick);
+      // 
+      // tsbEditDateTimeFormat
+      // 
+      this.tsbEditDateTimeFormat.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.tsbEditDateTimeFormat.Image = global::Couchcoding.Logbert.Properties.Resources.VSO_Time_16x;
+      this.tsbEditDateTimeFormat.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.tsbEditDateTimeFormat.Name = "tsbEditDateTimeFormat";
+      this.tsbEditDateTimeFormat.Size = new System.Drawing.Size(23, 22);
+      this.tsbEditDateTimeFormat.Text = "Set Timestamp Format";
+      this.tsbEditDateTimeFormat.Click += new System.EventHandler(this.TsbEditDateTimeFormatClick);
+      // 
+      // nfoPanel
+      // 
+      this.nfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.nfoPanel.BackColor = System.Drawing.Color.WhiteSmoke;
+      this.nfoPanel.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+      this.nfoPanel.InfoIcon = global::Couchcoding.Logbert.Properties.Resources.StatusAnnotations_Information_16xLG;
+      this.nfoPanel.Location = new System.Drawing.Point(8, 353);
+      this.nfoPanel.Name = "nfoPanel";
+      this.nfoPanel.ShowInfoIcon = true;
+      this.nfoPanel.ShowTitle = false;
+      this.nfoPanel.Size = new System.Drawing.Size(608, 48);
+      this.nfoPanel.TabIndex = 5;
+      this.nfoPanel.Text = "Note: The columns for bookmarks and log numbers will always be added and each reg" +
+    "ular expression needs a grouped item.";
+      this.nfoPanel.TextPadding = new System.Windows.Forms.Padding(0, 6, 0, 0);
+      this.nfoPanel.Title = "";
       // 
       // FrmColumnizer
       // 
@@ -383,9 +374,9 @@
     private System.Windows.Forms.Label lblName;
     private System.Windows.Forms.TextBox txtName;
     private System.Windows.Forms.Label label1;
-    private GuiLibrary.Controls.DataGridViewEx dgvColumns;
-    private GuiLibrary.Controls.InfoPanel pnlGrid;
-    private GuiLibrary.Controls.ToolStripEx tsColumns;
+    private Gui.Controls.DataGridViewEx dgvColumns;
+    private Gui.Controls.InfoPanel pnlGrid;
+    private Gui.Controls.ToolStripEx tsColumns;
     private System.Windows.Forms.ToolStripButton tsbAddColumn;
     private System.Windows.Forms.ToolStripButton tsbEditColumn;
     private System.Windows.Forms.ToolStripButton tsbRemoveColumn;
@@ -394,14 +385,13 @@
     private System.Windows.Forms.ToolStripButton tsbMoveUp;
     private System.Windows.Forms.ToolStripButton tsbMoveDown;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-    private GuiLibrary.Controls.InfoPanel nfoPanel;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-    private System.Windows.Forms.ToolStripButton tsbEditLogLevels;
-    private System.Windows.Forms.ToolStripButton tsbEditDateTimeFormat;
+    private Gui.Controls.InfoPanel nfoPanel;
     private System.Windows.Forms.DataGridViewTextBoxColumn clmName;
     private System.Windows.Forms.DataGridViewTextBoxColumn clmRegex;
     private System.Windows.Forms.DataGridViewCheckBoxColumn clmOptional;
     private System.Windows.Forms.DataGridViewComboBoxColumn clmType;
-    private System.Windows.Forms.DataGridViewTextBoxColumn clmGroupScope;
-  }
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+    private System.Windows.Forms.ToolStripButton tsbEditLogLevels;
+        private System.Windows.Forms.ToolStripButton tsbEditDateTimeFormat;
+    }
 }

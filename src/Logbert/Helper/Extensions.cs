@@ -29,14 +29,16 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.IO.Pipes;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Com.Couchcoding.Logbert.Helper
+namespace Couchcoding.Logbert.Helper
 {
   /// <summary>
   /// Implements some <see cref="Control"/> extensions.
@@ -68,6 +70,16 @@ namespace Com.Couchcoding.Logbert.Helper
     #endregion
 
     #region Public Methods
+
+    /// <summary>
+    /// Gets the specified <paramref name="selection"/> ordered by its index.
+    /// </summary>
+    /// <param name="selection">The <see cref="DataGridViewSelectedRowCollection"/> to order.</param>
+    /// <returns>The specified <paramref name="selection"/> ordered by its index.</returns>
+    public static IEnumerable<DataGridViewRow> OrderByIndex(this DataGridViewSelectedRowCollection selection)
+    {
+      return selection.Cast<DataGridViewRow>().OrderBy(row => row.Index);
+    }
 
     /// <summary>
     /// Suspens the target <see cref="Control"/> from processing redraw events.
@@ -195,11 +207,15 @@ namespace Com.Couchcoding.Logbert.Helper
       TextRenderer.MeasureText(
           shortenPath
         , font
-        , new Size(200, 0)
+        , new Size(maxWidth, 0)
         ,   TextFormatFlags.PathEllipsis 
           | TextFormatFlags.ModifyString);
 
-      return shortenPath;
+        int cutOffIndex = shortenPath.IndexOf('\0');
+
+        return cutOffIndex > 0 
+            ? shortenPath.Remove(cutOffIndex) 
+            : shortenPath;
     }
 
     /// <summary>
@@ -272,6 +288,16 @@ namespace Com.Couchcoding.Logbert.Helper
       unixTimestamp /= TimeSpan.TicksPerSecond;
       
       return unixTimestamp;
+    }
+    
+    /// <summary>
+    /// Determines whether the vertical <see cref="Scrollbar"/> of the specified <paramref name="ctrl"/> is visible or not.
+    /// </summary>
+    /// <param name="ctrl">the <see cref="Control"/> to check if it vertical <see cref="Scrollbar"/> is visible.</param>
+    /// <returns><c>True</c> if the vertical <see cref="Scrollbar"/> of the <see cref="Control"/> is visible; otherwise <c>false</c>.</returns>
+    public static bool IsVerticalScrollbarvisible(this Control ctrl)
+    {
+      return ((Win32.GetWindowLong(ctrl.Handle, Win32.GWL_STYLE) & Win32.WS_VSCROLL) != 0);
     }
 
     #endregion

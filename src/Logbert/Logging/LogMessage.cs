@@ -31,12 +31,12 @@
 using System;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Helper;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Properties;
 
 using MoonSharp.Interpreter;
 
-namespace Com.Couchcoding.Logbert.Logging
+namespace Couchcoding.Logbert.Logging
 {
   /// <summary>
   /// Implements the base class for <see cref="LogMessage"/>s.
@@ -68,7 +68,7 @@ namespace Com.Couchcoding.Logbert.Logging
     /// <summary>
     /// The timeshift offset for the <see cref="LogMessage"/>.
     /// </summary>
-    protected int mTimeShiftOffset;
+    protected TimeSpan mTimeShiftOffset;
 
     #endregion
 
@@ -130,10 +130,11 @@ namespace Com.Couchcoding.Logbert.Logging
         return mLogger;
       }
     }
+
     /// <summary>
     /// Get or sets the timeshift offset for the <see cref="LogMessage"/>.
     /// </summary>
-    public int TimeShiftOffset
+    public TimeSpan TimeShiftOffset
     {
       get
       {

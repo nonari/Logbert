@@ -29,18 +29,18 @@
 #endregion
 
 using System;
-using Com.Couchcoding.Logbert.Receiver.CustomReceiver;
+using Couchcoding.Logbert.Receiver.CustomReceiver;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Com.Couchcoding.Logbert.Properties;
+using Couchcoding.Logbert.Properties;
 using System.Text;
 using System.Windows.Forms;
 
-using Com.Couchcoding.Logbert.Helper;
+using Couchcoding.Logbert.Helper;
 using MoonSharp.Interpreter;
 
-namespace Com.Couchcoding.Logbert.Logging
+namespace Couchcoding.Logbert.Logging
 {
   /// <summary>
   /// Implements a <see cref="LogMessage"/> class for custom logger messages.
@@ -212,7 +212,7 @@ namespace Com.Couchcoding.Logbert.Logging
             if (mColumnizer.Columns[columnIndex - 2].ColumnType == LogColumnType.Timestamp)
             {
               // Special handling for the timestamp column. Maybe the timeshift value has to be added.
-              return mTimestamp.AddMilliseconds(mTimeShiftOffset).ToString(
+              return mTimestamp.Add(mTimeShiftOffset).ToString(
                   Settings.Default.TimestampFormat
                 , CultureInfo.InvariantCulture);
             }
